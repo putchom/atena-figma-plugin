@@ -1,14 +1,34 @@
 <h2>年賀はがき宛名ジェネレーター</h2>
 <div>
-  <label>CSVファイルを選択</label
-  ><input id="address" name="address" accept=".csv" type="file" />
+  <label for="address">CSVファイルを選択</label>
+  <input id="address" name="address" accept=".csv" type="file" />
 </div>
-<p>Count: <input id="count" value="5" /></p>
 <button id="create">作成</button>
 <script>
   document.getElementById("create").onclick = () => {
-    const textbox = document.getElementById("count");
-    const count = parseInt(textbox.value, 10);
-    parent.postMessage({ pluginMessage: { type: "create", count } }, "*");
+    const CSVFile = document.getElementById("address").files[0];
+    const fileReaderPromise = new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+
+      fileReader.addEventListener("error", () => reject(fileReader.error));
+      fileReader.addEventListener("load", () => {
+        const { result } = fileReader;
+        resolve(result);
+      });
+
+      fileReader.readAsText(CSVFile);
+    });
+
+    fileReaderPromise.then((CSVRaw) => {
+      const endOfFirstLineIndex = CSVRaw.indexOf("\n");
+      const rowsRaw = CSVRaw.slice(endOfFirstLineIndex + 1);
+      const rowsNoCells = rowsRaw.split("\n");
+      const rows = rowsNoCells.map((row) => row.split(","));
+
+      parent.postMessage(
+        { pluginMessage: { type: "create", rows: rows } },
+        "*"
+      );
+    });
   };
 </script>
