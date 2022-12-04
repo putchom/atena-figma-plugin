@@ -2,6 +2,7 @@ figma.showUI(__html__);
 
 figma.ui.onmessage = async (msg) => {
   await figma.loadFontAsync({ family: "Inter", style: "Regular" });
+  await figma.loadFontAsync({ family: "Zen Antique", style: "Regular" });
 
   const composeTextNode = (props: {
     fontSize: number;
@@ -22,12 +23,20 @@ figma.ui.onmessage = async (msg) => {
         value: 55,
         unit: "PERCENT",
       };
+      textNode.fontName = {
+        family: "Inter",
+        style: "Regular",
+      };
     } else {
       textNode.lineHeight = {
         value: props.fontSize,
         unit: "PIXELS",
       };
       textNode.resize(props.fontSize, props.characters.length * props.fontSize);
+      textNode.fontName = {
+        family: "Zen Antique",
+        style: "Regular",
+      };
     }
 
     return textNode;

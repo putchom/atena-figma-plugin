@@ -169,6 +169,7 @@ figma.showUI(__html__);
 figma.ui.onmessage = async (msg) => {
   // TextNodeのプロパティを変更するにはまずこの関数を呼び出す必要がある
   await figma.loadFontAsync({ family: "Inter", style: "Regular" });
+  await figma.loadFontAsync({ family: "Zen Antique", style: "Regular" });
 
   // TextNodeを構築する関数
   const composeTextNode = (props: {
@@ -185,19 +186,30 @@ figma.ui.onmessage = async (msg) => {
     textNode.characters = props.characters;
     textNode.fontSize = props.fontSize;
 
+    // 郵便番号とそうでない場合で場合分け
     if (props.isPostalCode) {
-      // 郵便番号の場合は文字間を調整
+      // 文字間を調整
       textNode.letterSpacing = {
         value: 55,
         unit: "PERCENT",
       };
+      // フォントはデフォルト
+      textNode.fontName = {
+        family: "Inter",
+        style: "Regular",
+      };
     } else {
-      // 郵便番号以外の場合は縦書きにする必要がある
+      // 縦書きにする必要がある
       textNode.lineHeight = {
         value: props.fontSize,
         unit: "PIXELS",
       };
       textNode.resize(props.fontSize, props.characters.length * props.fontSize);
+      // フォントは明朝体にする
+      textNode.fontName = {
+        family: "Zen Antique",
+        style: "Regular",
+      };
     }
 
     return textNode;
@@ -280,40 +292,28 @@ figma.ui.onmessage = async (msg) => {
 
 最初に、`onMessage`で UI スレッド側から、CSV から抽出した`rows`のデータを受け取ります。
 
-そして、受け取ったデータを`composeTextNode`関数で TextNode に変換していきます。この際、郵便番号は文字間を調整し、それ以外は縦書きのスタイルを適用します。
+そして、受け取ったデータを`composeTextNode`関数で TextNode に変換していきます。この際、郵便番号は文字間を調整し、それ以外は縦書きのスタイルを適用し、フォントを明朝体にします。
 
 最後に、それらのテキストレイヤーを Frame に入れ込みます。
 
-これで CSV でアップロードしたデータが 2 の工程で用意した年賀はがきの Frame に入りました！
-
-![](https://user-images.githubusercontent.com/945841/205437056-0491589c-6f40-4199-87c2-2d19e15fbb31.png)
-
-## 4. 見た目を整える
-
-これで完成でもよいのですが、年賀はがきは筆文字にするのが一般的なので、フォントを変えてみたいと思います。
-
-```ts
-
-```
-
 完成しました！
 
-## （おまけ）プラグインの UI を整える
+![](https://user-images.githubusercontent.com/945841/205484277-68e930d2-1425-4ad5-8789-083b7c7f3165.png)
 
-ブラウザデフォルトのスタイルもかっこいいですが、より Figma プラグインらしい見た目にしたいと思います。
-
-Figma のデザイナーさんが Figma のコンポーネントライブラリを公開してくれているのでそれを利用してスタイルを当てていきます。
+![](https://user-images.githubusercontent.com/945841/205484277-68e930d2-1425-4ad5-8789-083b7c7f3165.png)
+_実際にはがきを当ててみたところ_
 
 ## まとめ
 
 ここまで読んだ方はお気づきかもしれませんが、このプラグインはとりあえずシュッと作ったため以下のような点に対応できていません。
 
-- 文字列が長くなった場合のフォントサイズや改行
+- 文字列が長くなった場合のフォントサイズ縮小や改行
 - 連名
 - 縦書きのスタイル（ハイフンが横向きのまま etc...）
 - etc...
 
 文字列が長くなった場合のフォントサイズ縮小や改行
-、連名は頑張ればアップデートできそうですが、「縦書きのスタイル」に関しては、API から「Vertical alternates」を触れないため、いまいま対応できなそうです...
+、連名は頑張ればアップデートできそうですが、「縦書きのスタイル」に関しては、API から Text Node
+の Vertical alternates の設定を触れないため、いまいま自動化の対応はできなそうです...
 
-自分でプラグインを作ってみたことで、年賀状専門ソフトウェアの偉大さを知りました。いつもありがとうございます！
+自分でプラグインを作ってみたことで、年賀状専門ソフトの偉大さを知りました。いつもありがとうございます！
