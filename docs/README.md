@@ -1,4 +1,4 @@
-csv でアップロードした住所録から年賀はがきの宛名を作成するプラグインをつくった
+csv でアップロードした住所録から年賀はがきの宛名面を作成するプラグインをつくった
 
 こちらは [Figma 開発 Advent Calendar 2022](https://qiita.com/advent-calendar/2022/figma-development) 14 日目の記事です。
 
@@ -37,13 +37,13 @@ Figma プラグインの詳しい作り始め方は他に以下のような良�
 
 - [Figma プラグインの作り方 - Zenn](https://zenn.dev/ixkaito/articles/how-to-make-a-figma-plugin)
 
-## 2.　年賀状サイズの Frame を作成する
+## 2.　年賀はがきサイズの Frame を作成する
 
 サンプルのプラグインを実行するとオレンジの Rectangle を指定した数作成するプラグインが立ち上がります。
 
 ![]()
 
-まずはこれを改造して「指定した数の年賀状サイズの Frame を作成する」ようにします。
+まずはこれを改造して「指定した数の年賀はがきサイズの Frame を作成する」ようにします。
 
 ```html
 <!-- ui.html -->
@@ -100,7 +100,7 @@ Rectangle を作成する`createRectangle`関数を`createFrame`関数に置き�
 
 次に UI に`<input type="file" />`を設置して csv をアップロードできるようにし、そのデータをそれぞれの Frame に入れ込みたいと思います。
 
-今回は雑にこのような住所と名前が入った CSV を用意しました。
+今回は雑にこのような住所と名前が入った CSV を用意しました。（数字が半角だと後で折返しで問題が起こるので全角にしています。本当はどんなのが来ても変換するなどしたほうがいいのですが本筋からそ逸れるので一旦...）
 
 ```csv
 送り先郵便番号,送り先住所,送り先氏名,差出人郵便番号,差出人住所,差出人氏名
@@ -300,7 +300,7 @@ figma.ui.onmessage = async (msg) => {
 
 ![](https://user-images.githubusercontent.com/945841/205484277-68e930d2-1425-4ad5-8789-083b7c7f3165.png)
 
-![](https://user-images.githubusercontent.com/945841/205484277-68e930d2-1425-4ad5-8789-083b7c7f3165.png)
+![](https://user-images.githubusercontent.com/945841/205484648-e2b64741-5a6d-45da-9359-8c047e65b423.png)
 _実際にはがきを当ててみたところ_
 
 ## まとめ
