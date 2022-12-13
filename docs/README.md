@@ -1,5 +1,7 @@
 こちらは [Figma 開発 Advent Calendar 2022](https://qiita.com/advent-calendar/2022/figma-development) 14 日目の記事です。
 
+---
+
 こんにちは、[家計簿プリカ B/43](https://b43.jp/)を運営する[株式会社スマートバンク](https://smartbank.co.jp/)のデザイナーであり、自称オンラインお年賀デザイナーの [putchom](https://twitter.com/putchom) です。
 
 これまでに、年末年始に[初詣オンライン](https://hatsumoude.online/)や[餅つきオンライン](https://mochituki.online/)といったお年賀ネタサービスを作ってきました。
@@ -16,7 +18,7 @@
 
 年賀状作成専門の使い慣れないソフトを渡され、見慣れない UI を駆使しながら宛名印刷をして年を越したくはありません。
 
-そこで使い慣れたハイパーデザインツール Figma のプラグインを自作して年賀状の宛名面のデータを作成してみたいと思います。
+そこで使い慣れたデザインツール Figma のプラグインを自作して年賀状の宛名面のデータを作成してみたいと思います。
 
 # 完成品
 
@@ -90,11 +92,11 @@ figma.ui.onmessage = (msg) => {
 
 Rectangle を作成する `createRectangle` 関数を `createFrame` 関数に置き換えると、Frame を指定した数分作成できるようになります。
 
+- [参考: createFrame | Plugin API](https://www.figma.com/plugin-docs/api/properties/figma-createframe)
+
 また、`frame.resize(width, height)` で年賀はがきのサイズにリサイズします。
 
 ※ 年賀はがきが 10cm x 14.8cm なので 300dpi で px に変換して 1181px x 1748px にしました。
-
-- [参考: createFrame | Plugin API](https://www.figma.com/plugin-docs/api/properties/figma-createframe)
 
 ひとまず、作成ボタンを押したら、年賀はがきサイズの Frame が指定した数並ぶようになりました。
 
@@ -104,7 +106,9 @@ Rectangle を作成する `createRectangle` 関数を `createFrame` 関数に置
 
 次に UI に `<input type="file" />` を設置して csv をアップロードできるようにし、そのデータをそれぞれの Frame に入れ込みたいと思います。
 
-今回は雑にこのような住所と名前が入った CSV を用意しました。（数字が半角だと後で折返しで問題が起こるので全角にしています。本当はどんなのが来ても変換するなどしたほうがいいのですが本筋からそ逸れるので一旦これで...）
+今回は雑にこのような住所と名前が入った CSV を用意しました。
+
+（数字が半角だと後で折返しで問題が起こるので全角にしています。本当はどんなのが来ても変換するなどしたほうがいいのですが本筋からそ逸れるので一旦これで...）
 
 ```csv
 送り先郵便番号,送り先住所,送り先氏名,差出人郵便番号,差出人住所,差出人氏名
